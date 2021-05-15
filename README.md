@@ -23,6 +23,7 @@ Programs:<br /><br />
 &nbsp;&nbsp;&nbsp;samtools<br />
 &nbsp;&nbsp;&nbsp;bcftools<br />
 &nbsp;&nbsp;&nbsp;python<br />
+&nbsp;&nbsp;&nbsp;pysam (python)
     
 Files:<br /><br />
 &nbsp;&nbsp;&nbsp;vcf file that you wish to map to a new genome<br />
@@ -43,8 +44,9 @@ Files:<br /><br />
 &nbsp;&nbsp;&nbsp;samtools index oldGenome.v.flankingSeqs.bam<br />
     
 4) Identify variant positions in new genome:<br /><br />
-&nbsp;&nbsp;&nbsp;python Bam2SNPPosition.v1.0.py -file oldGenome.v.flankingSeqs.bam -qual 60 -multiple 1 -minLen 200 -minPid 99 > old2new.positions.txt<br /><br />
-&nbsp;&nbsp;&nbsp;help (and further explanations): python Bam2SNPPosition.v1.0.py -h<br />
+&nbsp;&nbsp;&nbsp;python Bam2SNPPosition.v1.1.py -file oldGenome.v.flankingSeqs.bam -qual 60 -multiple 1 -minLen 200 -minPid 99 -pos 101 > old2new.positions.txt<br /><br />
+&nbsp;&nbsp;&nbsp;help (and further explanations): python Bam2SNPPosition.v1.1.py -h<br />
+&nbsp;&nbsp;&nbsp;note: requires SNPPosBamv10 in same working directory
     
 5) Quality control:<br /><br />
 &nbsp;&nbsp;&nbsp;python CheckMappingVCF.v1.0.py -map old2new.positions.txt -fasta1 oldGenome.fasta -fai1 oldGenome.fasta.fai -fasta2 newGenome.fasta -fai2 newGenome.fasta.fai -flanking 20 -output most > old2new.positions.filtered.txt<br /><br />
