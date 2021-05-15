@@ -1,0 +1,2 @@
+# MapVCF2NewGenome
+A pipeline for mapping SNPs in a VCF file to a genome that wasn't used to call the variants.  It is expected that this strategy could be used for mapping VCF files to an updated genome assembly or for mapping to another closely related species' genome (to be able to directly compare nucleotide variants).  Right now this only works for SNPs, but could be modified for other variants.
