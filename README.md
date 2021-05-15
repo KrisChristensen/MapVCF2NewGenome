@@ -53,8 +53,8 @@ Files:<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python CheckMappingVCF.v1.0.py -h<br />
 
 6) Generate new vcf file:<br /><br />
-&nbsp;&nbsp;&nbsp;python Assign_New_SNP_Positions.v1.0.py -map old2new.positions.filtered.txt -vcf old.vcf.gz -fai newGenome.fasta.fai > new.vcf<br /><br />
-&nbsp;&nbsp;&nbsp;help (and further explanations): python Assign_New_SNP_Positions.v1.0.py -h<br />
+&nbsp;&nbsp;&nbsp;python Assign_New_SNP_Positions.v1.1.py -map old2new.positions.filtered.txt -vcf old.vcf.gz -fai newGenome.fasta.fai > new.vcf<br /><br />
+&nbsp;&nbsp;&nbsp;help (and further explanations): python Assign_New_SNP_Positions.v1.1.py -h<br />
 
 7) Sort vcf file<br /><br />
 &nbsp;&nbsp;&nbsp;bcftools sort new.vcf > new.sorted.vcf<br />
