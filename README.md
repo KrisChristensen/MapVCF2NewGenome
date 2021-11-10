@@ -27,8 +27,8 @@ Programs:<br /><br />
     
 Files:<br /><br />
 &nbsp;&nbsp;&nbsp;vcf file that you wish to map to a new genome<br />
-&nbsp;&nbsp;&nbsp;old genome file (fasta format and indexed -- samtools faidx oldGenome.fasta, bwa index oldGenome.fasta)<br />
-&nbsp;&nbsp;&nbsp;new genome file (fasta format and indexed -- samtools faidx newGenome.fasta)<br />
+&nbsp;&nbsp;&nbsp;old genome file (fasta format and indexed -- samtools faidx oldGenome.fasta)<br />
+&nbsp;&nbsp;&nbsp;new genome file (fasta format and indexed -- samtools faidx newGenome.fasta, bwa index newGenome.fasta)<br />
 
 <!-- usage -->
 ## Usage
