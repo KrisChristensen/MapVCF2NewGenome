@@ -37,7 +37,7 @@ Files:<br /><br />
 &nbsp;&nbsp;&nbsp;python VCF_2_Fasta_v1.1.py -vcf old.vcf.gz -fasta oldGenome.fasta -fai oldGenome.fasta.fai -flanking 100 > flankingSeqs.fasta<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python VCF_2_Fasta_v1.1.py -h
     
-2) Map fasta sequences to new genom:<br /><br />
+2) Map fasta sequences to new genome:<br /><br />
 &nbsp;&nbsp;&nbsp;bwa mem -M newGenome.fasta flankingSeqs.fasta | samtools sort -o newGenome.v.flankingSeqs.bam<br />
     
 3) Index alignment file:<br /><br />
