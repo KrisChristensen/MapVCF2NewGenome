@@ -37,14 +37,14 @@ Files:<br /><br />
 &nbsp;&nbsp;&nbsp;python VCF_2_Fasta_v1.1.py -vcf old.vcf.gz -fasta oldGenome.fasta -fai oldGenome.fasta.fai -flanking 100 > flankingSeqs.fasta<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python VCF_2_Fasta_v1.1.py -h
     
-2) Map fasta sequences:<br /><br />
-&nbsp;&nbsp;&nbsp;bwa mem -M oldGenome.fasta flankingSeqs.fasta | samtools sort -o oldGenome.v.flankingSeqs.bam<br />
+2) Map fasta sequences to new genom:<br /><br />
+&nbsp;&nbsp;&nbsp;bwa mem -M newGenome.fasta flankingSeqs.fasta | samtools sort -o newGenome.v.flankingSeqs.bam<br />
     
 3) Index alignment file:<br /><br />
-&nbsp;&nbsp;&nbsp;samtools index oldGenome.v.flankingSeqs.bam<br />
+&nbsp;&nbsp;&nbsp;samtools index newGenome.v.flankingSeqs.bam<br />
     
 4) Identify variant positions in new genome:<br /><br />
-&nbsp;&nbsp;&nbsp;python Bam2SNPPosition.v1.1.py -file oldGenome.v.flankingSeqs.bam -qual 60 -multiple 1 -minLen 200 -minPid 99 -pos 101 > old2new.positions.txt<br /><br />
+&nbsp;&nbsp;&nbsp;python Bam2SNPPosition.v1.1.py -file newGenome.v.flankingSeqs.bam -qual 60 -multiple 1 -minLen 200 -minPid 99 -pos 101 > old2new.positions.txt<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python Bam2SNPPosition.v1.1.py -h<br />
 &nbsp;&nbsp;&nbsp;note: requires SNPPosBamv10 in same working directory
     
