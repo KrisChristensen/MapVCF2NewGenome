@@ -48,8 +48,8 @@ Files:<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python Bam2SNPPosition.v1.1.py -h<br />
 &nbsp;&nbsp;&nbsp;note: requires SNPPosBamv10 in same working directory
     
-5) Quality control:<br /><br />
-&nbsp;&nbsp;&nbsp;python CheckMappingVCF.v1.0.py -map old2new.positions.txt -fasta1 oldGenome.fasta -fai1 oldGenome.fasta.fai -fasta2 newGenome.fasta -fai2 newGenome.fasta.fai -flanking 20 -output most > old2new.positions.filtered.txt<br /><br />
+5) Quality control (uses the flanking sequences generated from step 1 to check for exact sequence matching in the new genome, this script can allow the variant to be a mismatch; see help on output):<br /><br />
+&nbsp;&nbsp;&nbsp;python CheckMappingVCF.v1.0.py -map old2new.positions.txt -fasta1 flankingSeqs.fasta -fai1 flankingSeqs.fasta.fai -fasta2 newGenome.fasta -fai2 newGenome.fasta.fai -flanking 20 -output most > old2new.positions.filtered.txt<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python CheckMappingVCF.v1.0.py -h<br />
 
 6) Generate new vcf file:<br /><br />
