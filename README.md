@@ -53,7 +53,7 @@ Files:<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python CheckMappingVCF.v1.0.py -h<br />
 
 6) Generate new vcf file:<br /><br />
-&nbsp;&nbsp;&nbsp;python AssignNewSNPPositions.v1.3.py -map old2new.positions.filtered.txt -vcf old.vcf.gz -fai newGenome.fasta.fai > new.vcf<br /><br />
+&nbsp;&nbsp;&nbsp;python AssignNewSNPPositions.v1.3.py -map old2new.positions.filtered.txt -vcf old.vcf.gz -fai newGenome.fasta.fai -gen newGenome.fasta > new.vcf<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python AssignNewSNPPositions.v1.3.py -h<br />
 
 7) Sort vcf file<br /><br />
