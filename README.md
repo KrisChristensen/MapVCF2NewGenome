@@ -36,6 +36,11 @@ Files:<br /><br />
 1) Generate flanking sequences around the variant(s) so that they can be mapped to the new genome:<br /><br />
 &nbsp;&nbsp;&nbsp;python VCF_2_Fasta_v1.1.py -vcf old.vcf.gz -fasta oldGenome.fasta -fai oldGenome.fasta.fai -flanking 100 > flankingSeqs.fasta<br /><br />
 &nbsp;&nbsp;&nbsp;help (and further explanations): python VCF_2_Fasta_v1.1.py -h
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To run this step in parallel, please use version 1.2 of this script, which allows the user to specify scaffold.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here is an example of how this script can be used in parallel (files will need to be concatenated afterwards):<br /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cat test.fasta.fai | awk '{ print $1 }' | xargs -I @@ -P 2 sh -c \ <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"python3 VCF_2_Fasta_v1.2.py -vcf test.vcf -fasta test.fasta -fai test.fasta.fai -chr @@ > @@.out.fasta"
     
 2) Map fasta sequences to new genome:<br /><br />
 &nbsp;&nbsp;&nbsp;bwa mem -M newGenome.fasta flankingSeqs.fasta | samtools sort -o newGenome.v.flankingSeqs.bam<br />
