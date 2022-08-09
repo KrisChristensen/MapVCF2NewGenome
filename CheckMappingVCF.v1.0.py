@@ -24,20 +24,21 @@ args = parser.parse_args()
 #########################################################
 ### Open file (object-oriented programming)
 class Variables():
-    sequences = {}
+    sequences1 = {}
+    sequences2 = {}
 
 class OpenFile():
-    def __init__ (self, v, t):
+    def __init__ (self, v, t, n):
         if re.search(".gz$", v):
             self.file = gzip.open(v, 'r')        
         else:
             self.file = open(v, 'r')
         if t == "map":
-            sys.stderr.write("Opened map file\n")             
+            sys.stderr.write("Opened map file: {}\n".format(v))             
             self.readLinesMap(self.file)
         elif t == "fai":
-            sys.stderr.write("Opened index of fasta file\n")             
-            self.readLinesFastaFai(self.file)
+            sys.stderr.write("Opened index of fasta file (fai{}): {}\n".format(n, v))             
+            self.readLinesFastaFai(self.file, n)
 
     def readLinesMap(self, vc):
         self.open_map = vc
@@ -56,18 +57,20 @@ class OpenFile():
             if not re.search("^#", line):
                 self.out = line     
                 line_list = line.split("\t")
-                self.contig1 = line_list[0]
-                self.pos1 = line_list[1]
+                self.contig1 = "_".join(":".join(line_list[0].split(":")[:-3]).split("_")[:-1]) ###Gets rid of the information added, but still should accept all names (hopefully)
+                self.pos1 = ":".join(line_list[0].split(":")[:-3]).split("_")[-1]
                 self.contig2 = line_list[2]
                 self.pos2 = line_list[3]
+                if args.verbose == "yes":
+                    sys.stderr.write("\tChecking the placement of:\t{}\t{} to {}\t{}\n".format(self.contig1, self.pos1, self.contig2, self.pos2))                
                 self.start1 = int(self.pos1) - int(args.flanking)
                 self.end1 = int(self.pos1) + int(args.flanking)
                 self.start2 = int(self.pos2) - int(args.flanking)
                 self.end2 = int(self.pos2) + int(args.flanking)
                 self.snpPosInFlanking = int(args.flanking) + 1
                 self.variants_found += 1
-                if ((int(self.start1) > 0 and int(Variables.sequences[self.contig1]) >= int(self.end1)) and
-                (int(self.start2) > 0 and int(Variables.sequences[self.contig2]) >= int(self.end2))):
+                if ((int(self.start1) > 0 and int(Variables.sequences1[self.contig1]) >= int(self.end1)) and
+                (int(self.start2) > 0 and int(Variables.sequences2[self.contig2]) >= int(self.end2))):
                     self.location1 = str(self.contig1) + ":" + str(self.start1) + "-" + str(self.end1)
                     self.location2 = str(self.contig2) + ":" + str(self.start2) + "-" + str(self.end2)
                     self.sequence1 = "NA"
@@ -105,7 +108,7 @@ class OpenFile():
                         self.sequence2RC = self.reverseComplement(self.sequence2)
                         if self.sequence1 == self.sequence2 or self.sequence1 == self.sequence2RC:
                             if args.verbose != "NA":
-                                sys.stderr.write("exact-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
+                                sys.stderr.write("\texact-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
                             self.variants_used += 1
                             if args.output != "NA":
                                 print("{}\t{}".format(self.out, "exact"))
@@ -131,28 +134,29 @@ class OpenFile():
                             if self.first == "yes" and self.third == "yes":
                                 self.variants_varMissing += 1
                                 if args.verbose != "NA":
-                                    sys.stderr.write("most-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
+                                    sys.stderr.write("\tmost-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
                                 if args.output != "NA" and args.output != "exact":
                                     print("{}\t{}".format(self.out, "most"))                                                                         
                             elif (self.first == "yes" or self.third == "yes") and self.second == "yes":
                                 self.variants_partial += 1
                                 if args.verbose != "NA":
-                                    sys.stderr.write("partial-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
+                                    sys.stderr.write("\tpartial-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
                                 if args.output != "NA" and args.output != "exact" and args.output != "most":
                                     print("{}\t{}".format(self.out, "partial"))                                                                
                             else:
                                 self.variants_mismatch += 1
                                 if args.verbose != "NA":
-                                    sys.stderr.write("no-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
+                                    sys.stderr.write("\tno-match\t{}\t{}\trc:{}\n".format(self.sequence1, self.sequence2, self.sequence2RC))
 
                 else:
                     self.variants_unknown += 1
         self.open_map.close()
         sys.stderr.write("\tFinished reading vcf file: Found {} variants, correct variants:{}, unknown variants:{}, CompleteMismatch:{}, variantOnlyMismatch:{}, partialMatch:{}\n".format(self.variants_found, self.variants_used, self.variants_unknown, self.variants_mismatch, self.variants_varMissing, self.variants_partial))
         
-    def readLinesFastaFai(self, f):
+    def readLinesFastaFai(self, f, n):
         """Measures the lengths of the scaffolds in the fai file"""
         self.filename = f
+        self.filenumber = n
         self.number_scaffolds = 0
         self.total_size = 0
         for line in self.filename:
@@ -162,11 +166,14 @@ class OpenFile():
                 pass
             line = line.rstrip('\n')
             (self.header, self.nucleotideCount, self.offset, self.lineBases, self.lineWidth) = line.split("\t")
-            Variables.sequences[self.header] = int(self.nucleotideCount)
+            if int(self.filenumber) == 1:
+                Variables.sequences1[self.header] = int(self.nucleotideCount)
+            elif int(self.filenumber) == 2:
+                Variables.sequences2[self.header] = int(self.nucleotideCount)
             self.total_size += int(self.nucleotideCount)
             self.number_scaffolds += 1
         sys.stderr.write("\tFinished reading scaffold fasta fai file: Found {} sequence(s)\n".format(self.number_scaffolds)) 
-        sys.stderr.write("                    Total Nucleotide(s): {}\n\n".format(self.total_size))
+        sys.stderr.write("\tTotal Nucleotide(s): {}\n\n".format(self.total_size))
         self.filename.close()
         
     def reverseComplement (self, seq):
@@ -179,10 +186,17 @@ class OpenFile():
         return("".join(self.new))
 
 if __name__ == '__main__':
+    version = 1.0
+    sys.stderr.write("\nRunning CheckMappingVCF version: {} with the following parameters:\n".format(version))
+    sys.stderr.write("\t-map: {}\n".format(args.map))
+    sys.stderr.write("\t-fasta1: {}\n".format(args.fasta1))
+    sys.stderr.write("\t-fasta2: {}\n".format(args.fasta2))
+    sys.stderr.write("\t-fai1: {}\n".format(args.fai1))
+    sys.stderr.write("\t-fai2: {}\n".format(args.fai2))
+    sys.stderr.write("\t-flanking: {}\n".format(args.flanking))
+    sys.stderr.write("\t-output: {}\n".format(args.output))
+    sys.stderr.write("\t-verbose: {}\n\n".format(args.verbose))
     Variables()
-    open_fai = OpenFile(args.fai1, "fai")
-    open_fai = OpenFile(args.fai2, "fai")
-    open_map = OpenFile(args.map, "map")
-
-
-           
+    open_fai = OpenFile(args.fai1, "fai", "1")
+    open_fai = OpenFile(args.fai2, "fai", "2")
+    open_map = OpenFile(args.map, "map", "1")
