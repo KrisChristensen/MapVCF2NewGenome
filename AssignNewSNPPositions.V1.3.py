@@ -9,7 +9,7 @@ import re                       #allows regular expressions to be used
 ##########################################################
 ### Command-line Arguments
 parser = argparse.ArgumentParser(description="Output filtered repositioned SNPs of a vcf file based on supplied positions.")
-parser.add_argument("-map", help = "The location of the file output by Bam2SNPPosition.v1.0.py and verified with CheckMappingVCF.v1.1.py with the old positions and new positions", default=sys.stdin, required=True)
+parser.add_argument("-map", help = "The location of the file output by Bam2SNPPosition.v1.0.py and verified with CheckMappingVCF.v1.0.py", default=sys.stdin, required=True)
 parser.add_argument("-vcf", help = "The location of a vcf file to replace snp locations", default=sys.stdin, required=True)
 parser.add_argument("-gen", help = "The full path of the new genome (for use in generating the new vcf file in proper format)", default=sys.stdin, required=True)
 parser.add_argument("-fai", help = "The location of a fai file (samtools faidx) for the genome mapping to (for use in generating the vcf file contig positions)", default=sys.stdin, required=True)    
