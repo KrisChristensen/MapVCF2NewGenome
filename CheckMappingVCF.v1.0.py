@@ -57,8 +57,8 @@ class OpenFile():
             if not re.search("^#", line):
                 self.out = line     
                 line_list = line.split("\t")
-                self.contig1 = "_".join(":".join(line_list[0].split(":")[:-3]).split("_")[:-1]) ###Gets rid of the information added, but still should accept all names (hopefully)
-                self.pos1 = ":".join(line_list[0].split(":")[:-3]).split("_")[-1]
+                self.contig1 = line_list[0]
+                self.pos1 = line_list[1]
                 self.contig2 = line_list[2]
                 self.pos2 = line_list[3]
                 if args.verbose == "yes":
